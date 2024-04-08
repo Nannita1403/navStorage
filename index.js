@@ -71,6 +71,9 @@ const PRODUCTS = [
     }
   ];
   
+  const PRODUCTSCART = JSON.parse(localStorage.getItem("productsCart")) || [];
+  // lo hemos añadido justo debajo de la declaración del array de PRODUCTS
+  
   const printProductsContent = (products) => {
       const divContent = document.querySelector(".content");
       divContent.innerHTML = "";
@@ -91,6 +94,9 @@ const PRODUCTS = [
           cart.classList.add("cart-img");
           cart.src = "https://cdn-icons-png.flaticon.com/512/5465/5465858.png";
   
+          cart.addEventListener("click", () => addToCart(product));
+          // Línea añadida justo debajo de las creaciones de los elementos en el pintado de productos
+          
           div.append(cart);
           div.append(name);
           div.append(divImg);
@@ -98,9 +104,36 @@ const PRODUCTS = [
           divImg.append(img);
           divContent.append(div);
       }
+      
   }
-  
+
+  const addToCart = (product) => {
+    console.log(PRODUCTSCART);
+    PRODUCTSCART.push(product);
+    console.log(PRODUCTSCART);
+    localStorage.setItem("productsCart", JSON.stringify(PRODUCTSCART));
+    printCart(PRODUCTSCART);
+}
+// Esta función la podemos añadir donde queramos siempre y cuando sea antes de llamar a la función printProductsContent
+const printCart = (products) => {
+    const cart = document.querySelector(".cart");
+    cart.innerHTML = "";
+
+    for (const product of products) {
+        const divProduct = document.createElement("div");
+        const imgProduct = document.createElement("img");
+
+        imgProduct.src = product.img;
+
+        divProduct.append(imgProduct);
+        cart.append(divProduct);
+    }
+}
+
+printCart(PRODUCTSCART);
+
   printProductsContent(PRODUCTS);
+  
   
   const carrito = document.querySelector(".carrito");
   
@@ -109,3 +142,7 @@ const PRODUCTS = [
   
       cartDiv.classList.toggle("openned");
   })
+
+
+
+
